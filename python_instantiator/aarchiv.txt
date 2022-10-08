@@ -1,0 +1,7 @@
+idx = operator.n_id
+                if idx + 1 < len(branch_operators) and branch_operators[idx+1].split("_")[0] == "Reduce":
+                    skip_next = True
+                    next_op = AbstractOperator.AbstractOperator(branch_operators[idx+1]) # table_operator_manager seems to be needed, but is not inserted yet
+                    op_code = self.get_op_code(operator, next_op)
+                else:
+                    op_code = self.get_op_code(operator)    
