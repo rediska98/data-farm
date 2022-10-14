@@ -64,7 +64,7 @@ class SupplierOperatorManager(AbstractTableOperatorManager):
                 else:
                     break                
                 if attempts == 10:
-                    return None, None
+                    return None, None, None
             else:
                 break
                 
@@ -83,7 +83,9 @@ class SupplierOperatorManager(AbstractTableOperatorManager):
             else:
                 filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
                 filter_op = "="
-            
-        return {"WHERE": {"FIELD": field, "OPERATOR": filter_op, "VALUE": filter_value}}, field
+
+        selectivity = utils.get_element_by_seed(self.filter_field_value[field]["selectivity"], value_seed)
+
+        return {"WHERE": {"FIELD": field, "OPERATOR": filter_op, "VALUE": filter_value}}, field, selectivity
             
         

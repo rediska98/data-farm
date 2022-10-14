@@ -85,19 +85,23 @@ class LineitemOperatorManager(AbstractTableOperatorManager):
             else:
                 break                
             if attempts == 10:
-                return None, None
+                return None, None, None
+
+        selectivity = utils.get_element_by_seed(self.filter_field_value[field]["selectivity"], value_seed)
+
         if field == "L_SHIPDATE":
-            return self.handle_shipdate(field_seed+value_seed, field_seed+1, value_seed+1), field
+            return self.handle_shipdate(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
         if field == "L_RECEIPTDATE":
-            return self.handle_receiptdate(field_seed+value_seed, field_seed+1, value_seed+1), field
+            return self.handle_receiptdate(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
         elif field == "L_QUANTITY":
             filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"], value_seed))
-            filter_op = "<=" 
+            filter_op = "<="
         elif field == "L_SHIPMODE":
             filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
             filter_op = "="
-            
-        return {"WHERE": {"FIELD": field, "OPERATOR": filter_op, "VALUE": filter_value}}, field
+
+
+        return {"WHERE": {"FIELD": field, "OPERATOR": filter_op, "VALUE": filter_value}}, field, selectivity
             
         
     

@@ -74,20 +74,23 @@ class OrdersOperatorManager(AbstractTableOperatorManager):
             else:
                 break                
             if attempts == 10:
-                return None, None
+                return None, None, None
+
+        selectivity = utils.get_element_by_seed(self.filter_field_value[field]["selectivity"], value_seed)
+
         if field == "O_ORDERDATE":
-            return self.handle_orderdate(field_seed+value_seed, field_seed+1, value_seed+1), field
+            return self.handle_orderdate(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
         elif field == "O_TOTALPRICE":
-            return self.handle_price(field_seed+value_seed, field_seed+1, value_seed+1), field
+            return self.handle_price(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
         elif field == "O_ORDERSTATUS":
             #filter_field = self.fields[field]
             element = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
-            return {"WHERE": {"FIELD": "O_ORDERSTATUS", "OPERATOR": "=", "VALUE": element}}, field
+            return {"WHERE": {"FIELD": "O_ORDERSTATUS", "OPERATOR": "=", "VALUE": element}}, field, selectivity
             #filter_value = f' "{element}" '
             #filter_op = "=="
         elif field == "O_ORDERPRIORITY":
             element = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
-            return {"WHERE": {"FIELD": "O_ORDERPRIORITY", "OPERATOR": "=", "VALUE": element}}, field
+            return {"WHERE": {"FIELD": "O_ORDERPRIORITY", "OPERATOR": "=", "VALUE": element}}, field, selectivity
 
             
         #return (self.build_filter_code(in_var_name, out_var_name, field, filter_value, filter_op),

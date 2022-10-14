@@ -47,16 +47,17 @@ class NationOperatorManager(AbstractTableOperatorManager):
         filter_op = ""
         if field in self.contradict_filter.keys():
             if any([el in self.contradict_filter[field] for el in used_filters]) or field in used_filters:
-                return None, None
-            
+                return None, None, None
+
         if field == "N_REGIONKEY":
             # This is not correct, but I will first leave it as it is, so that I can see what is wrong
             #filter_field = self.fields[field]
             filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
             filter_op = "="
 
-            
-        return {"WHERE": {"FIELD": field, "OPERATOR": filter_op, "VALUE": filter_value}}, field
+        selectivity = utils.get_element_by_seed(self.filter_field_value[field]["selectivity"], value_seed)
+
+        return {"WHERE": {"FIELD": field, "OPERATOR": filter_op, "VALUE": filter_value}}, field, selectivity
             
         
     

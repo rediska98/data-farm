@@ -71,7 +71,10 @@ class PartOperatorManager(AbstractTableOperatorManager):
             else:
                 break                
             if attempts == 10:
-                return None, None
+                return None, None, None
+
+        selectivity = utils.get_element_by_seed(self.filter_field_value[field]["selectivity"], value_seed)
+
         if field == "P_RETAILPRICE":
             # This is not correct, but I will first leave it as it is, so that I can see what is wrong
             #filter_field = self.fields[field]
@@ -79,12 +82,12 @@ class PartOperatorManager(AbstractTableOperatorManager):
             filter_op = "<="
         elif field == "P_TYPE":
             filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
-            return {"WHERE": {"FIELD": "P_TYPE", "OPERATOR": "LIKE", "VALUE": filter_value}}, field
+            return {"WHERE": {"FIELD": "P_TYPE", "OPERATOR": "LIKE", "VALUE": filter_value}}, field, selectivity
 
         elif field == "P_NAME":
             filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
-            return {"WHERE": {"FIELD": "P_NAME", "OPERATOR": "LIKE", "VALUE": filter_value}}, field
-        
+            return {"WHERE": {"FIELD": "P_NAME", "OPERATOR": "LIKE", "VALUE": filter_value}}, field, selectivity
+
         elif field == "P_SIZE":
             if (value_seed * field_seed) % 5 == 0:
                 s = random.randint(3,6)
@@ -95,8 +98,8 @@ class PartOperatorManager(AbstractTableOperatorManager):
             else:
                 filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
                 filter_op = "="
-            return {"WHERE": {"FIELD": "P_SIZE", "OPERATOR": filter_op, "VALUE": filter_value}}, field
-            
-        return {"WHERE": {"FIELD": field, "OPERATOR": filter_op, "VALUE": filter_value}}, field
+            return {"WHERE": {"FIELD": "P_SIZE", "OPERATOR": filter_op, "VALUE": filter_value}}, field, selectivity
+
+        return {"WHERE": {"FIELD": field, "OPERATOR": filter_op, "VALUE": filter_value}}, field, selectivity
             
         
