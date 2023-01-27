@@ -3,7 +3,7 @@ import  python_instantiator.DatasetJob.utils as utils
 
 class RegionOperatorManager(AbstractTableOperatorManager):
     table_name = "region"
-    full_table_name = "tcph.dbo.REGION"
+    full_table_name = "REGION"
     type_schema = "(int, str, str)"
     suffix = "R_"
     fields = {

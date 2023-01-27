@@ -1,0 +1,593 @@
+{
+  "executionPlan": {
+    "nodes": [
+      {
+        "id": 1,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 2,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 1
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 2
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 5,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 4
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 5
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 8,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 7
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 8
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 11,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 10
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 11
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "type": "operator",
+        "operator": "Filter",
+        "predecessors": [
+          {
+            "id": 12
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 13
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "type": "operator",
+        "operator": "Join",
+        "predecessors": [
+          {
+            "id": 14
+          },
+          {
+            "id": 9
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 15
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "type": "operator",
+        "operator": "Join",
+        "predecessors": [
+          {
+            "id": 16
+          },
+          {
+            "id": 6
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 17
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "type": "operator",
+        "operator": "Join",
+        "predecessors": [
+          {
+            "id": 18
+          },
+          {
+            "id": 3
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 19
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 22,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 21
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 22
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "type": "operator",
+        "operator": "Filter",
+        "predecessors": [
+          {
+            "id": 23
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 24
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "type": "operator",
+        "operator": "Join",
+        "predecessors": [
+          {
+            "id": 25
+          },
+          {
+            "id": 20
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 26
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "type": "operator",
+        "operator": "Aggregate",
+        "predecessors": [
+          {
+            "id": 27
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "type": "operator",
+        "operator": "Filter",
+        "predecessors": [
+          {
+            "id": 28
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 31,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 30
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 31
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 34,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 33
+          }
+        ]
+      },
+      {
+        "id": 35,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 34
+          }
+        ]
+      },
+      {
+        "id": 36,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 37,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 36
+          }
+        ]
+      },
+      {
+        "id": 38,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 37
+          }
+        ]
+      },
+      {
+        "id": 39,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 40,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 39
+          }
+        ]
+      },
+      {
+        "id": 41,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 40
+          }
+        ]
+      },
+      {
+        "id": 42,
+        "type": "operator",
+        "operator": "Filter",
+        "predecessors": [
+          {
+            "id": 41
+          }
+        ]
+      },
+      {
+        "id": 43,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 42
+          }
+        ]
+      },
+      {
+        "id": 44,
+        "type": "operator",
+        "operator": "Join",
+        "predecessors": [
+          {
+            "id": 43
+          },
+          {
+            "id": 38
+          }
+        ]
+      },
+      {
+        "id": 45,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 44
+          }
+        ]
+      },
+      {
+        "id": 46,
+        "type": "operator",
+        "operator": "Join",
+        "predecessors": [
+          {
+            "id": 45
+          },
+          {
+            "id": 35
+          }
+        ]
+      },
+      {
+        "id": 47,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 46
+          }
+        ]
+      },
+      {
+        "id": 48,
+        "type": "operator",
+        "operator": "Join",
+        "predecessors": [
+          {
+            "id": 47
+          },
+          {
+            "id": 32
+          }
+        ]
+      },
+      {
+        "id": 49,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 48
+          }
+        ]
+      },
+      {
+        "id": 50,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 51,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 50
+          }
+        ]
+      },
+      {
+        "id": 52,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 51
+          }
+        ]
+      },
+      {
+        "id": 53,
+        "type": "operator",
+        "operator": "Filter",
+        "predecessors": [
+          {
+            "id": 52
+          }
+        ]
+      },
+      {
+        "id": 54,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 53
+          }
+        ]
+      },
+      {
+        "id": 55,
+        "type": "operator",
+        "operator": "Join",
+        "predecessors": [
+          {
+            "id": 54
+          }
+        ]
+      },
+      {
+        "id": 56,
+        "type": "operator",
+        "operator": "Join",
+        "predecessors": [
+          {
+            "id": 55
+          },
+          {
+            "id": 49
+          }
+        ]
+      },
+      {
+        "id": 57,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 56
+          },
+          {
+            "id": 29
+          }
+        ]
+      },
+      {
+        "id": 58,
+        "type": "operator",
+        "operator": "Sort",
+        "predecessors": [
+          {
+            "id": 57
+          }
+        ]
+      },
+      {
+        "id": 59,
+        "type": "operator",
+        "operator": "LocalLimit",
+        "predecessors": [
+          {
+            "id": 58
+          }
+        ]
+      },
+      {
+        "id": 60,
+        "type": "operator",
+        "operator": "GlobalLimit",
+        "predecessors": [
+          {
+            "id": 59
+          }
+        ]
+      },
+      {
+        "id": 61,
+        "type": "sink",
+        "operator": "Data Sink",
+        "predecessors": [
+          {
+            "id": 60
+          }
+        ]
+      }
+    ]
+  }
+}

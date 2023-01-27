@@ -44,6 +44,29 @@ def submit_jobs(init_jobs_to_run):
     BuildAndSubmit.run_jobs(job_projects)
     return
 
+def submit_sql_jobs(init_jobs_to_run):
+    exec_plans_path_already_computed = BuildAndSubmit.get_exec_plans_path()
+    exec_plans_already_computed = {os.path.basename(ep).replace("$.json", "") for ep in
+                                   exec_plans_path_already_computed}
+
+    job_projects = BuildAndSubmit.get_sql_job_projects()
+    job_projects = sorted(job_projects, key=BuildAndSubmit.job_id_v)
+    job_projects = [jp for jp in job_projects if (jp in init_jobs_to_run) and (jp not in exec_plans_already_computed)]
+    print(f"Submitting #{job_projects.__len__()} jobs:", job_projects)
+    BuildAndSubmit.run_sql_jobs(job_projects)
+    return
+
+def submit_spark_jobs(init_jobs_to_run):
+    exec_plans_path_already_computed = BuildAndSubmit.get_exec_plans_path()
+    exec_plans_already_computed = {os.path.basename(ep).replace("$.json", "") for ep in
+                                   exec_plans_path_already_computed}
+
+    job_projects = BuildAndSubmit.get_job_projects()
+    job_projects = sorted(job_projects, key=BuildAndSubmit.job_id_v)
+    job_projects = [jp for jp in job_projects if (jp in init_jobs_to_run) and (jp not in exec_plans_already_computed)]
+    print(f"Submitting #{job_projects.__len__()} jobs:", job_projects)
+    BuildAndSubmit.run_spark_jobs(job_projects)
+    return
 
 def active_learning_iteration(X_train, y_train, ids_train, X_test, ids_test, feature_cols, verbose=False):
     if X_train.__len__() != ids_train.__len__():
@@ -208,7 +231,17 @@ def run_active_learning(features_df, feature_cols, label_col, n_iter=20, max_ear
         print("Candidates to run:\n", new_ids_train)
         # -> RUN Jobs
         new_jobs_to_run = new_ids_train.iloc[:, 0].values
-        submit_jobs(new_jobs_to_run)
+
+        if CONFIG.EXPERIMENT_JOB == "SPARK":
+            submit_spark_jobs(new_jobs_to_run)
+        elif CONFIG.EXPERIMENT_JOB == "SQL":
+            submit_sql_jobs(new_jobs_to_run)
+        elif CONFIG.EXPERIMENT_JOB == "FLINK":
+            submit_jobs(new_jobs_to_run)
+        else:
+            raise Exception("Unknown Job Type for Experiment")
+
+
 
         # -> Collect exec time
         executed_jobs_runtime = get_executed_plans_exec_time(new_jobs_to_run)
@@ -277,11 +310,20 @@ def run(config):
 
     init_jobs_to_run = features_df.iloc[sample_model.sample_ids].index.get_level_values(0)
 
+    print(init_jobs_to_run)
     # -> RUN Jobs
-    submit_jobs(init_jobs_to_run)
+    if CONFIG.EXPERIMENT_JOB == "SPARK":
+        submit_spark_jobs(init_jobs_to_run)
+    elif CONFIG.EXPERIMENT_JOB == "SQL":
+        submit_sql_jobs(init_jobs_to_run)
+    elif CONFIG.EXPERIMENT_JOB == "FLINK":
+        submit_jobs(init_jobs_to_run)
+    else:
+        raise Exception("Unknown Job Type for Experiment")
 
     # -> Collect exec time
     executed_jobs_runtime = get_executed_plans_exec_time(init_jobs_to_run)
+    print("Executed times", executed_jobs_runtime)
 
     features_df = pd.merge(features_df, executed_jobs_runtime, left_index=True, right_index=True, how="left")
     features_df[config.LABEL_COL] = np.log(features_df["netRunTime"])

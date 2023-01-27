@@ -5,24 +5,28 @@ from os.path import join
 class CONFIG:
 
     # PATH TO DATA-FARM PROJECT
-    PROJECT_PATH = "/absolute/path/to/DataFarm/project/" # <absolute_path_to_project>
+    PROJECT_PATH = "/home/denis/IdeaProjects/data-farm/" # <absolute_path_to_project>
 
     # PATH TO INPUT DATA
-    GENERATED_JOB_INPUT_DATA_PATH = "/absolute/path/to/input/data/" # <absolute_path_to_input_data>
+    GENERATED_JOB_INPUT_DATA_PATH = "/home/denis/IdeaProjects/data-farm/input_data/tpc-h/" # <absolute_path_to_input_data>
 
     # FLINK HOME
-    FLINK_HOME = "/absolute/path/to/flink" # <path_to_flink>
+    FLINK_HOME = "/home/denis/flink-1.10.0/" # <path_to_flink>
 
     # EXPERIMENT ID
     EXPERIMENT_ID = "Experiment1"
     # DATA ID
-    DATA_ID = "1GB"
+    DATA_ID = "5GB"#
 
     # Job generator conf
-    N_JOBS = 10
-    N_VERSIONS = 3
+    N_JOBS = 200
+    N_VERSIONS = 5
     JOB_SEED = -1  # -1 | 0
     DATA_MANAGER = "TPCH" # "TPCH" | "IMDB"
+    JOB_TYPE = "FLINK"#"FLINK" | "SPARK"
+    UNIFIED_JSON = True
+
+    #SQL Job Generator is in python_instantiator folder
 
     #################################################################
 
@@ -50,9 +54,25 @@ class CONFIG:
     GENERATED_JOB_OUTPUT_PLAN_PATH = join(GENERATED_JOB_EXEC_PLAN_FOLDER, DATA_ID+"/")
     GENERATED_JOB_TASK_MANAGER_DETAILS_OUTPUT_PATH = join(GENERATED_JOB_TASK_MANAGER_DETAILS, DATA_ID+"/")
 
+    #Select Job Type to run experiment on
+    EXPERIMENT_JOB = "SQL"# "FLINK" | "SQL" | "SPARK"
+
+
+# Spark config
+    SPARK_HOME = "/home/denis/.local/lib/python3.10/site-packages/pyspark/"
+    SPARK_JOB_MASTER = "local[*]" # * - all available CPU'S
+    SPARK_DRIVER_MEMORY = "5g"
+
+    # Postgres DB config
+    PG_HOST = "localhost"
+    PG_DATABASE = "tpch5gb" # "tpch5gb" | "tpch10gb" | "tpch"
+    PG_USER = "postgres"
+    PG_PASSWORD = "qwer1234"
 
     # Job Submission config
-    LOCAL = "nolocal"  # [local|nolocal]
+    LOCAL = "local"  # [local|nolocal]
+
+    #Flink's
     LOCAL_HEAP = "8GB"  # [8GB|none]
     PARALLELISM = "1"
 
@@ -73,15 +93,29 @@ class CONFIG:
 
     SAMPLE_COL = "Log_sourceCardinalitySum"
 
+    # FEATURE_COLS = ["t_0", "t_1", "t_2", "t_3", "t_4", "t_5", "t_6",
+    #                 "joinOutCard_sum", "joinOutCard_mean", "joinOutCard_std", "joinOutCard_min", "joinOutCard_max",
+    #                 "filterOutCard_mean", "filterOutCard_std", "filterOutCard_min", "filterOutCard_max",
+    #                 "groupbyOutCard_mean", "groupbyOutCard_std", "groupbyOutCard_min", "groupbyOutCard_max",
+    #                 "outCardinality_mean", "outCardinality_std", "outCardinality_min", "outCardinality_max",
+    #                 "outCardinality_kurtosis", "outCardinality_skew",
+    #                 "sourceOutCard_mean", "sourceOutCard_std", "sourceOutCard_min", "sourceOutCard_max", "sourceCardinalitySum",
+    #                 "complexity_mean", "complexity_min", "complexity_max"
+    #                 ]
+    #
+
+     #############################################################################################
+    # removing complexity features for sql, since there is no map operators in generated sql jobs #
+     #############################################################################################
     FEATURE_COLS = ["t_0", "t_1", "t_2", "t_3", "t_4", "t_5", "t_6",
-                    "joinOutCard_sum", "joinOutCard_mean", "joinOutCard_std", "joinOutCard_min", "joinOutCard_max",
-                    "filterOutCard_mean", "filterOutCard_std", "filterOutCard_min", "filterOutCard_max",
-                    "groupbyOutCard_mean", "groupbyOutCard_std", "groupbyOutCard_min", "groupbyOutCard_max",
-                    "outCardinality_mean", "outCardinality_std", "outCardinality_min", "outCardinality_max",
-                    "outCardinality_kurtosis", "outCardinality_skew",
-                    "sourceOutCard_mean", "sourceOutCard_std", "sourceOutCard_min", "sourceOutCard_max", "sourceCardinalitySum",
-                    "complexity_mean", "complexity_min", "complexity_max"
-                    ]
+                        "joinOutCard_sum", "joinOutCard_mean", "joinOutCard_std", "joinOutCard_min", "joinOutCard_max",
+                        "filterOutCard_mean", "filterOutCard_std", "filterOutCard_min", "filterOutCard_max",
+                        "groupbyOutCard_mean", "groupbyOutCard_std", "groupbyOutCard_min", "groupbyOutCard_max",
+                        "outCardinality_mean", "outCardinality_std", "outCardinality_min", "outCardinality_max",
+                        "outCardinality_kurtosis", "outCardinality_skew",
+                        "sourceOutCard_mean", "sourceOutCard_std", "sourceOutCard_min", "sourceOutCard_max", "sourceCardinalitySum"
+                        ]
+
 
     MAX_EARLY_STOP = 2
     EARLY_STOP_TH = 0.1 # Float between 0 and 1

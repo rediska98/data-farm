@@ -1,0 +1,111 @@
+{
+  "executionPlan": {
+    "nodes": [
+      {
+        "id": 1,
+        "type": "Data Source",
+        "operator": "textFile"
+      },
+      {
+        "id": 2,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 1
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 2
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "type": "operator",
+        "operator": "filter",
+        "predecessors": [
+          {
+            "id": 3
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 4
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "type": "operator",
+        "operator": "reduceByKey",
+        "predecessors": [
+          {
+            "id": 5
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 6
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 7
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "type": "operator",
+        "operator": "sortBy",
+        "predecessors": [
+          {
+            "id": 8
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "type": "operator",
+        "operator": "sortBy",
+        "predecessors": [
+          {
+            "id": 9
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "type": "sink",
+        "operator": "Data Sink",
+        "predecessors": [
+          {
+            "id": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,63 @@
+Sort [o_year#1664 ASC NULLS FIRST], true
++- Aggregate [o_year#1664], [o_year#1664, (sum(case_volume#1665) / sum(volume#1469)) AS (sum(case_volume) / sum(volume))#1683]
+   +- Project [UDF(o_orderdate#216) AS o_year#1664, volume#1469, UDF(n_name#148, volume#1469) AS case_volume#1665]
+      +- Join Inner, (o_orderkey#212L = l_orderkey#79L)
+         :- Project [o_orderkey#212L, o_orderdate#216]
+         :  +- Join Inner, (c_custkey#23L = o_custkey#213L)
+         :     :- Project [c_custkey#23L]
+         :     :  +- Join Inner, (n_nationkey#147L = c_nationkey#26L)
+         :     :     :- Project [n_nationkey#147L]
+         :     :     :  +- Join Inner, (n_regionkey#149L = r_regionkey#178L)
+         :     :     :     :- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Nation, true])).n_nationkey AS n_nationkey#147L, knownnotnull(assertnotnull(input[0, main.scala.Nation, true])).n_regionkey AS n_regionkey#149L]
+         :     :     :     :  +- MapElements main.scala.TpchSchemaProvider$$Lambda$1702/0x0000000840d15840@69346100, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#146: main.scala.Nation
+         :     :     :     :     +- MapElements main.scala.TpchSchemaProvider$$Lambda$1701/0x0000000840d16840@4769e70c, class java.lang.String, [StructField(value,StringType,true)], obj#137: [Ljava.lang.String;
+         :     :     :     :        +- DeserializeToObject value#128.toString, obj#136: java.lang.String
+         :     :     :     :           +- Relation [value#128] text
+         :     :     :     +- Project [r_regionkey#178L]
+         :     :     :        +- Filter (isnotnull(r_name#179) AND (r_name#179 = AMERICA))
+         :     :     :           +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Region, true])).r_regionkey AS r_regionkey#178L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Region, true])).r_name, true, false, true) AS r_name#179, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Region, true])).r_comment, true, false, true) AS r_comment#180]
+         :     :     :              +- MapElements main.scala.TpchSchemaProvider$$Lambda$1704/0x0000000840d21040@1db565f2, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#177: main.scala.Region
+         :     :     :                 +- MapElements main.scala.TpchSchemaProvider$$Lambda$1703/0x0000000840d20040@76641439, class java.lang.String, [StructField(value,StringType,true)], obj#169: [Ljava.lang.String;
+         :     :     :                    +- DeserializeToObject value#160.toString, obj#168: java.lang.String
+         :     :     :                       +- Relation [value#160] text
+         :     :     +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_custkey AS c_custkey#23L, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_nationkey AS c_nationkey#26L]
+         :     :        +- MapElements main.scala.TpchSchemaProvider$$Lambda$1682/0x0000000840d09840@499445d2, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#22: main.scala.Customer
+         :     :           +- MapElements main.scala.TpchSchemaProvider$$Lambda$1657/0x0000000840cf6040@3ba015b1, class java.lang.String, [StructField(value,StringType,true)], obj#9: [Ljava.lang.String;
+         :     :              +- DeserializeToObject value#0.toString, obj#8: java.lang.String
+         :     :                 +- Relation [value#0] text
+         :     +- Project [o_orderkey#212L, o_custkey#213L, o_orderdate#216]
+         :        +- Filter (isnotnull(o_orderdate#216) AND ((o_orderdate#216 <= 1996-12-31) AND (o_orderdate#216 >= 1995-01-01)))
+         :           +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_orderkey AS o_orderkey#212L, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_custkey AS o_custkey#213L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_orderstatus, true, false, true) AS o_orderstatus#214, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_totalprice AS o_totalprice#215, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_orderdate, true, false, true) AS o_orderdate#216, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_orderpriority, true, false, true) AS o_orderpriority#217, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_clerk, true, false, true) AS o_clerk#218, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_shippriority AS o_shippriority#219L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_comment, true, false, true) AS o_comment#220]
+         :              +- MapElements main.scala.TpchSchemaProvider$$Lambda$1706/0x0000000840d22840@753c7411, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#211: main.scala.Order
+         :                 +- MapElements main.scala.TpchSchemaProvider$$Lambda$1705/0x0000000840d21840@6ebf9c2d, class java.lang.String, [StructField(value,StringType,true)], obj#197: [Ljava.lang.String;
+         :                    +- DeserializeToObject value#188.toString, obj#196: java.lang.String
+         :                       +- Relation [value#188] text
+         +- Project [l_orderkey#79L, volume#1469, n_name#148]
+            +- Join Inner, (l_suppkey#81L = s_suppkey#350L)
+               :- Project [l_suppkey#81L, l_orderkey#79L, volume#1469]
+               :  +- Join Inner, (l_partkey#80L = p_partkey#264L)
+               :     :- Project [l_partkey#80L, l_suppkey#81L, l_orderkey#79L, UDF(l_extendedprice#84, l_discount#85) AS volume#1469]
+               :     :  +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Lineitem, true])).l_orderkey AS l_orderkey#79L, knownnotnull(assertnotnull(input[0, main.scala.Lineitem, true])).l_partkey AS l_partkey#80L, knownnotnull(assertnotnull(input[0, main.scala.Lineitem, true])).l_suppkey AS l_suppkey#81L, knownnotnull(assertnotnull(input[0, main.scala.Lineitem, true])).l_extendedprice AS l_extendedprice#84, knownnotnull(assertnotnull(input[0, main.scala.Lineitem, true])).l_discount AS l_discount#85]
+               :     :     +- MapElements main.scala.TpchSchemaProvider$$Lambda$1700/0x0000000840d17840@2835b3d1, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#78: main.scala.Lineitem
+               :     :        +- MapElements main.scala.TpchSchemaProvider$$Lambda$1699/0x0000000840d15040@690c3b1f, class java.lang.String, [StructField(value,StringType,true)], obj#57: [Ljava.lang.String;
+               :     :           +- DeserializeToObject value#48.toString, obj#56: java.lang.String
+               :     :              +- Relation [value#48] text
+               :     +- Project [p_partkey#264L]
+               :        +- Filter (isnotnull(p_type#268) AND (p_type#268 = ECONOMY ANODIZED STEEL))
+               :           +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Part, true])).p_partkey AS p_partkey#264L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Part, true])).p_name, true, false, true) AS p_name#265, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Part, true])).p_mfgr, true, false, true) AS p_mfgr#266, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Part, true])).p_brand, true, false, true) AS p_brand#267, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Part, true])).p_type, true, false, true) AS p_type#268, knownnotnull(assertnotnull(input[0, main.scala.Part, true])).p_size AS p_size#269L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Part, true])).p_container, true, false, true) AS p_container#270, knownnotnull(assertnotnull(input[0, main.scala.Part, true])).p_retailprice AS p_retailprice#271, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Part, true])).p_comment, true, false, true) AS p_comment#272]
+               :              +- MapElements main.scala.TpchSchemaProvider$$Lambda$1708/0x0000000840d24040@58267ba1, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#263: main.scala.Part
+               :                 +- MapElements main.scala.TpchSchemaProvider$$Lambda$1707/0x0000000840d23040@1c0a143, class java.lang.String, [StructField(value,StringType,true)], obj#249: [Ljava.lang.String;
+               :                    +- DeserializeToObject value#240.toString, obj#248: java.lang.String
+               :                       +- Relation [value#240] text
+               +- Project [n_name#148, s_suppkey#350L]
+                  +- Join Inner, (n_nationkey#147L = s_nationkey#353L)
+                     :- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Nation, true])).n_nationkey AS n_nationkey#147L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Nation, true])).n_name, true, false, true) AS n_name#148]
+                     :  +- MapElements main.scala.TpchSchemaProvider$$Lambda$1702/0x0000000840d15840@69346100, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#146: main.scala.Nation
+                     :     +- MapElements main.scala.TpchSchemaProvider$$Lambda$1701/0x0000000840d16840@4769e70c, class java.lang.String, [StructField(value,StringType,true)], obj#137: [Ljava.lang.String;
+                     :        +- DeserializeToObject value#1610.toString, obj#136: java.lang.String
+                     :           +- Relation [value#1610] text
+                     +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Supplier, true])).s_suppkey AS s_suppkey#350L, knownnotnull(assertnotnull(input[0, main.scala.Supplier, true])).s_nationkey AS s_nationkey#353L]
+                        +- MapElements main.scala.TpchSchemaProvider$$Lambda$1712/0x0000000840d2b040@65293ca5, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#349: main.scala.Supplier
+                           +- MapElements main.scala.TpchSchemaProvider$$Lambda$1711/0x0000000840d2a840@16a14076, class java.lang.String, [StructField(value,StringType,true)], obj#337: [Ljava.lang.String;
+                              +- DeserializeToObject value#328.toString, obj#336: java.lang.String
+                                 +- Relation [value#328] text

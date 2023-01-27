@@ -3,7 +3,7 @@ import  python_instantiator.DatasetJob.utils as utils
 
 class LineitemOperatorManager(AbstractTableOperatorManager):
     table_name = "lineitem"
-    full_table_name = "tcph.dbo.LINEITEM"
+    full_table_name = "LINEITEM"
     suffix = "L_"
     type_schema = "(int, int, int, int, float, float, float, float, str, str, date, date, date, str, str, str)"
     fields = {
@@ -38,12 +38,12 @@ class LineitemOperatorManager(AbstractTableOperatorManager):
             "values": ["13.0", "26.0", "38.0"]
         },
         "L_SHIPDATE": {
-            "selectivity": ["0.25","0.25", "0.25", "0.5", "0.75", "0.25"], # changed, to be regarded again if necessary
-            "values": ["'1992-06-01'", "'1993-10-26'", "'1994-01-01'", "'1995-06-19'", "'1997-02-09'", "'1998-05-25'"]
+            'selectivity': ['0.25', '0.5', '0.75'],
+            'values': ["'1993-10-26'", "'1995-06-19'", "'1997-02-09'"]
         },
         "L_RECEIPTDATE": {
-            "selectivity": ["0.25","0.25", "0.25", "0.5", "0.75", "0.25"], # changed, to be regarded again if necessary
-            "values": ["'1992-07-01'", "'1993-11-26'", "'1994-02-01'", "'1995-07-19'", "'1997-03-09'", "'1998-06-25'"]
+            'selectivity': ['0.25', '0.5', '0.75'],
+            'values': ["'1993-11-11'", "'1995-07-05'", "'1997-02-24'"]
         },
         "L_SHIPMODE": {
             "selectivity": ["0.1414", "0.1417", "0.1411", "0.1432", "0.1421", "0.1462"],
@@ -64,7 +64,7 @@ class LineitemOperatorManager(AbstractTableOperatorManager):
     
     map_fields = ["L_QUANTITY", "L_DISCOUNT"]
     
-    ship_date_choices = ["<=", ">", "BETWEEN"]
+    ship_date_choices = ["<="] #, ">", "BETWEEN"] it's too consuming to collect selectivities for all operators
     
     def __init__(self):
         super().__init__()
@@ -90,9 +90,13 @@ class LineitemOperatorManager(AbstractTableOperatorManager):
         selectivity = utils.get_element_by_seed(self.filter_field_value[field]["selectivity"], value_seed)
 
         if field == "L_SHIPDATE":
-            return self.handle_shipdate(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
-        if field == "L_RECEIPTDATE":
-            return self.handle_receiptdate(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
+            filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"], value_seed))
+            filter_op = "<="
+            #return self.handle_shipdate(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
+        elif field == "L_RECEIPTDATE":
+            filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"], value_seed))
+            filter_op = "<="
+            #return self.handle_receiptdate(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
         elif field == "L_QUANTITY":
             filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"], value_seed))
             filter_op = "<="
@@ -123,9 +127,9 @@ class LineitemOperatorManager(AbstractTableOperatorManager):
             value = str(utils.get_element_by_seed(self.filter_field_value["L_SHIPDATE"]["values"], value_seed_2))
             if (value_seed_1 % 2) == 0:
                 if (value_seed_2 % 2) == 0:
-                    return {"WHERE": {"FIELD": "L_SHIPDATE", "OPERATOR": filter_op, "VALUE": f"dateadd(yy, 1, cast({value} as date))"}}
+                    return {"WHERE": {"FIELD": "L_SHIPDATE", "OPERATOR": filter_op, "VALUE": value}}
                 else:
-                    return {"WHERE": {"FIELD": "L_SHIPDATE", "OPERATOR": filter_op, "VALUE": f"dateadd(mm, 1, cast({value} as date))"}}
+                    return {"WHERE": {"FIELD": "L_SHIPDATE", "OPERATOR": filter_op, "VALUE": value}}
             else:
                 return {"WHERE": {"FIELD": "L_SHIPDATE", "OPERATOR": filter_op, "VALUE": value}}
         else:
@@ -151,9 +155,9 @@ class LineitemOperatorManager(AbstractTableOperatorManager):
             value = str(utils.get_element_by_seed(self.filter_field_value["L_RECEIPTDATE"]["values"], value_seed_2))
             if (value_seed_1 % 2) == 0:
                 if (value_seed_2 % 2) == 0:
-                    return {"WHERE": {"FIELD": "L_RECEIPTDATE", "OPERATOR": filter_op, "VALUE": f"dateadd(yy, 1, cast({value} as date))"}}
+                    return {"WHERE": {"FIELD": "L_RECEIPTDATE", "OPERATOR": filter_op, "VALUE": value}}
                 else:
-                    return {"WHERE": {"FIELD": "L_RECEIPTDATE", "OPERATOR": filter_op, "VALUE": f"dateadd(mm, 1, cast({value} as date))"}}
+                    return {"WHERE": {"FIELD": "L_RECEIPTDATE", "OPERATOR": filter_op, "VALUE": value}}
             else:
                 return {"WHERE": {"FIELD": "L_RECEIPTDATE", "OPERATOR": filter_op, "VALUE": value}}
         else:

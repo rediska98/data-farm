@@ -89,7 +89,7 @@ class AbstractJob:
         if "ORDER BY" in self.cummulated.keys():
             self.cummulated["ORDER BY"] = self.unique(self.cummulated["ORDER BY"])
             
-    def create_info(self):
+    #def create_info(self):
          
         
     def select_to_sql(self):

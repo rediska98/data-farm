@@ -1,0 +1,107 @@
+{
+  "executionPlan": {
+    "nodes": [
+      {
+        "operator": "Data Sink",
+        "id": 0,
+        "predecessors": [
+          {
+            "id": 1
+          }
+        ],
+        "type": "sink"
+      },
+      {
+        "operator": "Aggregate",
+        "id": 1,
+        "predecessors": [
+          {
+            "id": 2
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Hash Join",
+        "id": 2,
+        "predecessors": [
+          {
+            "id": 3
+          },
+          {
+            "id": 4
+          },
+          {
+            "id": 5
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Seq Scan",
+        "id": 3,
+        "type": "Data Source"
+      },
+      {
+        "operator": "Hash",
+        "id": 4,
+        "predecessors": [
+          {
+            "id": 6
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Aggregate",
+        "id": 5,
+        "predecessors": [
+          {
+            "id": 7
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Gather",
+        "id": 6,
+        "predecessors": [
+          {
+            "id": 9
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Filter",
+        "id": 7,
+        "predecessors": [
+          {
+            "id": 8
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Seq Scan",
+        "id": 8,
+        "type": "Data Source"
+      },
+      {
+        "operator": "Filter",
+        "id": 9,
+        "predecessors": [
+          {
+            "id": 10
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Seq Scan",
+        "id": 10,
+        "type": "Data Source"
+      }
+    ]
+  }
+}

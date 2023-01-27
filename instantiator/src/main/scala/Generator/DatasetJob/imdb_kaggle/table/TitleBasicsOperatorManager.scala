@@ -20,6 +20,18 @@ case class TitleBasicsOperatorManager() extends AbstractTableOperatorManager {
     "runtimeMinutes" -> "8",
     "genres" -> "9"
   )
+
+  override val sortFields: Map[String, String] = Map(
+    "titleId" -> "1",
+    "titleType" -> "2",
+    "primaryTitle" -> "3",
+    "originalTitle" -> "4",
+    "isAdult" -> "5",
+    "startYear" -> "6",
+    "endYear" -> "7",
+    "runtimeMinutes" -> "8",
+    "genres" -> "9"
+  )
   override val joinFieldTable: Map[String, Map[String, String]] = Map("titleId" -> Map("title.principals" -> "titleId", "title.akas" -> "titleId", "title.ratings" -> "titleId"))
   override val filterFieldValue: Map[String, Map[String, Seq[String]]] = Map(
     "titleType"-> Map("selectivity"-> Seq("0.08476158788090499", "0.11250643123537413", "0.7026607729811453", "0.0044910768831961205", "0.019034718001689706", "0.027598159817088158", "0.0018286442284058677", "0.004131322862636715", "0.03910681106354258", "0.0038804750460164276"), "values"-> Seq("movie", "short", "tvEpisode", "tvMiniSeries", "tvMovie", "tvSeries", "tvShort", "tvSpecial", "video", "videoGame")),

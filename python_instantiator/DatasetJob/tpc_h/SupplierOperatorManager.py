@@ -4,7 +4,7 @@ import random
 
 class SupplierOperatorManager(AbstractTableOperatorManager):
     table_name = "supplier"
-    full_table_name = "tcph.dbo.SUPPLIER"
+    full_table_name = "SUPPLIER"
     type_schema = "(int, str, str, int, str, float, str)"
     suffix = "S_"
     fields = {
@@ -30,7 +30,7 @@ class SupplierOperatorManager(AbstractTableOperatorManager):
             "values": ["1770.7175", "4541.0650000000005", "7270.635"]
         },
         "S_NATIONKEY": {
-            "selectivity": ["0.25", "0.5", "0.75", "0.25", "0.5", "0.75", "0.25", "0.5", "0.75"],
+            "selectivity": ["0.04", "0.04", "0.04", "0.04", "0.04", "0.04", "0.04", "0.04", "0.04"],
             "values": ["2.0", "3.0", "4.0", "5.0" , "6.0", "12.0", "18.0", "22.0", "24.0"]
         }
     }
@@ -74,15 +74,15 @@ class SupplierOperatorManager(AbstractTableOperatorManager):
             filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
             filter_op = "<="
         elif field == "S_NATIONKEY":
-            if (value_seed * field_seed) % 5 == 0:
-                s = random.randint(3,6)
-                subset = random.sample(self.filter_field_value["S_NATIONKEY"]["values"], s)
-                filter_value = "("+", ".join(subset)+")"
-                filter_op = "IN"
-            #filter_field = self.fields[field]
-            else:
-                filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
-                filter_op = "="
+            # if (value_seed * field_seed) % 5 == 0:
+            #     s = random.randint(3,6)
+            #     subset = random.sample(self.filter_field_value["S_NATIONKEY"]["values"], s)
+            #     filter_value = "("+", ".join(subset)+")"
+            #     filter_op = "IN"
+            # #filter_field = self.fields[field]
+            # else:
+            filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
+            filter_op = "="
 
         selectivity = utils.get_element_by_seed(self.filter_field_value[field]["selectivity"], value_seed)
 

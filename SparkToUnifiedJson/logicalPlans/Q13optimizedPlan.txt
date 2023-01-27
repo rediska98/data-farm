@@ -1,0 +1,17 @@
+Sort [custdist#2602L DESC NULLS LAST, c_count#2596L DESC NULLS LAST], true
++- Aggregate [c_count#2596L], [c_count#2596L, count(o_custkey#213L) AS custdist#2602L]
+   +- Aggregate [o_custkey#213L], [o_custkey#213L, count(o_orderkey#212L) AS c_count#2596L]
+      +- Project [o_orderkey#212L, o_custkey#213L]
+         +- Join LeftOuter, (c_custkey#23L = o_custkey#213L)
+            :- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_custkey AS c_custkey#23L]
+            :  +- MapElements main.scala.TpchSchemaProvider$$Lambda$1682/0x0000000840d09840@499445d2, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#22: main.scala.Customer
+            :     +- MapElements main.scala.TpchSchemaProvider$$Lambda$1657/0x0000000840cf6040@3ba015b1, class java.lang.String, [StructField(value,StringType,true)], obj#9: [Ljava.lang.String;
+            :        +- DeserializeToObject value#0.toString, obj#8: java.lang.String
+            :           +- Relation [value#0] text
+            +- Project [o_orderkey#212L, o_custkey#213L]
+               +- Filter NOT UDF(o_comment#220)
+                  +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_orderkey AS o_orderkey#212L, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_custkey AS o_custkey#213L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_orderstatus, true, false, true) AS o_orderstatus#214, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_totalprice AS o_totalprice#215, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_orderdate, true, false, true) AS o_orderdate#216, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_orderpriority, true, false, true) AS o_orderpriority#217, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_clerk, true, false, true) AS o_clerk#218, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_shippriority AS o_shippriority#219L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_comment, true, false, true) AS o_comment#220]
+                     +- MapElements main.scala.TpchSchemaProvider$$Lambda$1706/0x0000000840d22840@753c7411, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#211: main.scala.Order
+                        +- MapElements main.scala.TpchSchemaProvider$$Lambda$1705/0x0000000840d21840@6ebf9c2d, class java.lang.String, [StructField(value,StringType,true)], obj#197: [Ljava.lang.String;
+                           +- DeserializeToObject value#188.toString, obj#196: java.lang.String
+                              +- Relation [value#188] text

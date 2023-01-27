@@ -1,0 +1,217 @@
+{
+  "executionPlan": {
+    "nodes": [
+      {
+        "id": 1,
+        "type": "Data Source",
+        "operator": "textFile"
+      },
+      {
+        "id": 2,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 1
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 2
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "type": "operator",
+        "operator": "filter",
+        "predecessors": [
+          {
+            "id": 3
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "type": "operator",
+        "operator": "keyBy",
+        "predecessors": [
+          {
+            "id": 4
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "type": "Data Source",
+        "operator": "textFile"
+      },
+      {
+        "id": 7,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 6
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 7
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "type": "operator",
+        "operator": "keyBy",
+        "predecessors": [
+          {
+            "id": 8
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "type": "operator",
+        "operator": "join",
+        "predecessors": [
+          {
+            "id": 9
+          },
+          {
+            "id": 5
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 10
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "type": "operator",
+        "operator": "keyBy",
+        "predecessors": [
+          {
+            "id": 11
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "type": "Data Source",
+        "operator": "textFile"
+      },
+      {
+        "id": 14,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 13
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 14
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "type": "operator",
+        "operator": "keyBy",
+        "predecessors": [
+          {
+            "id": 15
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "type": "operator",
+        "operator": "join",
+        "predecessors": [
+          {
+            "id": 16
+          },
+          {
+            "id": 12
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "type": "operator",
+        "operator": "map",
+        "predecessors": [
+          {
+            "id": 17
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "type": "operator",
+        "operator": "reduceByKey",
+        "predecessors": [
+          {
+            "id": 18
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "type": "operator",
+        "operator": "filter",
+        "predecessors": [
+          {
+            "id": 19
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "type": "operator",
+        "operator": "sortBy",
+        "predecessors": [
+          {
+            "id": 20
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "type": "sink",
+        "operator": "Data Sink",
+        "predecessors": [
+          {
+            "id": 21
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -27,6 +27,18 @@ case class OrdersOperatorManager() extends AbstractTableOperatorManager {
     "SHIPPRIORITY" -> "8",
     "COMMENT" -> "9"
   )
+
+  override val sortFields: Map[String, String] = Map(
+    "ORDERKEY" -> "1",
+    "CUSTKEY" -> "2",
+    "ORDERSTATUS" -> "3",
+    "TOTALPRICE" -> "4",
+    "ORDERDATE" -> "5",
+    "ORDERPRIORITY" -> "6",
+    "CLERK" -> "7",
+    "SHIPPRIORITY" -> "8",
+    "COMMENT" -> "9"
+  )
   override val filterFieldValue: Map[String, Map[String, Seq[String]]] = Map(
     "ORDERSTATUS" -> Map(
       "selectivity" -> Seq("0.48627533333333334", "0.4880293333333333", "0.025695333333333334"),

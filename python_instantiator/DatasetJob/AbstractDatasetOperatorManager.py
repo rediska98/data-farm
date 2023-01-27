@@ -75,7 +75,7 @@ class AbstractDatasetOperatorManager:
             next_join_relation = None
             attempt = 1
             next_join_relation = self.get_next_join_relation(table_sequence, table_names)
-            while next_join_relation in join_sequence and attempts <= self.max_attempts:
+            while next_join_relation in join_sequence and attempt <= self.max_attempts:
                 attempt += 1
                 next_join_relation = self.get_next_join_relation(table_sequence, table_names)
                 

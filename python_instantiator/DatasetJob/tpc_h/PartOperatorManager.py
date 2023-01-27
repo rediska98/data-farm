@@ -4,7 +4,7 @@ import random
 
 class PartOperatorManager(AbstractTableOperatorManager):
     table_name = "part"
-    full_table_name = "tcph.dbo.PART"
+    full_table_name = "PART"
     type_schema = "(int, str, str, str, str, int, str, float, str)"
     suffix = "P_"
     fields = {
@@ -35,11 +35,11 @@ class PartOperatorManager(AbstractTableOperatorManager):
             "values": ["'%%BRASS'", "'%%NICKEL'", "'STANDARD%%'", "'MEDIUM%%'", "'%%PLATED%%'"]
         },
         "P_NAME": {
-            "selectivity": ["0.2", "0.2", "0.2", "0.2", "0.2"],
+            "selectivity": ["0.05", "0.05", "0.05", "0.05", "0.05"],
             "values": ["'%green%'", "'%tomato%'", "'%almond%'", "'%steel%'", "'%yellow%'"]
         },
         "P_SIZE": {
-            "selectivity": ["0.2", "0.2", "0.2", "0.2", "0.2", "0.2", "0.2", "0.2", "0.2"],
+            "selectivity": ["0.02", "0.02", "0.02", "0.02", "0.02", "0.02", "0.02", "0.02", "0.02"],
             "values": ["1", "11", "15", "18", "24", "26", "32", "36", "44" ]
         }
     }
@@ -89,15 +89,15 @@ class PartOperatorManager(AbstractTableOperatorManager):
             return {"WHERE": {"FIELD": "P_NAME", "OPERATOR": "LIKE", "VALUE": filter_value}}, field, selectivity
 
         elif field == "P_SIZE":
-            if (value_seed * field_seed) % 5 == 0:
-                s = random.randint(3,6)
-                subset = random.sample(self.filter_field_value["P_SIZE"]["values"], s)
-                filter_value = "("+", ".join(subset)+")"
-                filter_op = "IN"
-            #filter_field = self.fields[field]
-            else:
-                filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
-                filter_op = "="
+            # if (value_seed * field_seed) % 5 == 0:
+            #     s = random.randint(3,6)
+            #     subset = random.sample(self.filter_field_value["P_SIZE"]["values"], s)
+            #     filter_value = "("+", ".join(subset)+")"
+            #     filter_op = "IN"
+            # #filter_field = self.fields[field]
+            # else:
+            filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
+            filter_op = "="
             return {"WHERE": {"FIELD": "P_SIZE", "OPERATOR": filter_op, "VALUE": filter_value}}, field, selectivity
 
         return {"WHERE": {"FIELD": field, "OPERATOR": filter_op, "VALUE": filter_value}}, field, selectivity

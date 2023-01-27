@@ -17,6 +17,15 @@ case class TitlePrincipalsOperatorManager() extends AbstractTableOperatorManager
     "job" -> "5",
     "characters" -> "6"
   )
+
+  override val sortFields: Map[String, String] = Map(
+    "titleId" -> "1",
+    "ordering" -> "2",
+    "nconst" -> "3",
+    "category" -> "4",
+    "job" -> "5",
+    "characters" -> "6"
+  )
   override val joinFieldTable: Map[String, Map[String, String]] = Map("titleId"-> Map("title.akas"-> "titleId", "title.ratings"-> "titleId", "title.basics"-> "titleId"), "nconst"-> Map("name.basics"-> "nconst"))
 
   override val filterFieldValue: Map[String, Map[String, Seq[String]]] = Map(

@@ -22,6 +22,13 @@ case class PartsuppOperatorManager() extends AbstractTableOperatorManager{
     "SUPPLYCOST" -> "4",
     "COMMENT" -> "5"
   )
+  override val sortFields: Map[String, String] = Map(
+    "PARTKEY" -> "1",
+    "SUPPKEY" -> "2",
+    "AVAILQTY" -> "3",
+    "SUPPLYCOST" -> "4",
+    "COMMENT" -> "5"
+  )
 
   override val joinFieldTable: Map[String, Map[String, String]] = Map(
     "PARTKEY" -> Map(

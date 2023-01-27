@@ -20,6 +20,12 @@ case class NationOperatorManager() extends AbstractTableOperatorManager {
     "REGIONKEY" -> "3",
     "COMMENT" -> "4"
   )
+  override val sortFields: Map[String, String] = Map(
+    "NATIONKEY" -> "1",
+    "NAME" -> "2",
+    "REGIONKEY" -> "3",
+    "COMMENT" -> "4"
+  )
   override val joinFieldTable: Map[String, Map[String, String]] = Map(
     "NATIONKEY" -> Map(
       "customer" -> "NATIONKEY",

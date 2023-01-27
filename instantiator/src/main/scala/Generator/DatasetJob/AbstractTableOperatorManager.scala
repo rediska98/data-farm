@@ -16,6 +16,8 @@ trait AbstractTableOperatorManager {
 
   val fields: Map[String, String]
 
+  val sortFields: Map[String, String]
+
   val joinFieldTable: Map[String, Map[String, String]]
 
   val filterFieldValue: Map[String, Map[String, Seq[String]]]

@@ -3,6 +3,7 @@ import sys
 import json
 import networkx as nx
 from networkx.drawing.nx_agraph import graphviz_layout
+from CONFIG import CONFIG
 
 import matplotlib.pyplot as plt
 
@@ -23,6 +24,12 @@ def load_exec_plans(plan_folder):
             ep_str = " ".join(f.readlines()).replace('"UTF-16LE"', r'\"UTF-16LE\"') # To fix issues with the json produced by flink
 
         ep_json = json.loads(ep_str)
+        #renaming pact in unified jsons
+        if CONFIG.UNIFIED_JSON == True:
+            for node in ep_json['executionPlan']['nodes']:
+                node['pact'] = node.pop('operator')
+                if node['type'] == 'operator':
+                    node['type'] = 'pact'
         exec_plans.append((ep_id, data_size_id, ep_json))
     return exec_plans
 
@@ -57,7 +64,7 @@ def compute_flink_graph_from_exec_plan(exec_plan, G, include_cycles=True):
         if "predecessors" in n.keys():
             pres = n["predecessors"]
             for p in pres:
-                color = "orange" if p["ship_strategy"] == "Broadcast" else "black"
+                color = "black" #ToDo keep old logic
                 G.add_edge(p["id"], n["id"], **p, color=color)
 
     return G

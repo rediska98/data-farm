@@ -3,7 +3,7 @@ import  python_instantiator.DatasetJob.utils as utils
 
 class CustomerOperatorManager(AbstractTableOperatorManager):
     table_name = "customer"
-    full_table_name = "tcph.dbo.CUSTOMER"
+    full_table_name = "CUSTOMER"
     suffix = "C_"
     type_schema = "(int, str, str, int, str, float, str, str)"
     fields = {
@@ -33,9 +33,13 @@ class CustomerOperatorManager(AbstractTableOperatorManager):
             "values": ["'AUTOMOBILE'", "'BUILDING'", "'FURNITURE'", "'HOUSEHOLD'", "'MACHINERY'"]
         },
         "C_NATIONKEY": {
-            "selectivity": ["0.25", "0.5", "0.75"],
-            "values": ["14", "5", "19"]
-        }
+            'selectivity': ['0.0395', '0.03983333333333333', '0.03999333333333333', '0.04013333333333333', '0.039966666666666664', '0.03968', '0.04066666666666666', '0.03938666666666667',
+                            '0.04028', '0.04107333333333334', '0.04006', '0.039753333333333335', '0.03965333333333333', '0.04022',
+                            '0.039946666666666665', '0.03947333333333333', '0.03982666666666667', '0.03983333333333333',
+                            '0.04016', '0.04066666666666666', '0.03936', '0.04005333333333334', '0.04052', '0.040073333333333336',
+                            '0.03988666666666667'],
+            'values': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                       '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']}
     }
     
     contradict_filter = {"C_NATIONKEY": ["N_REGIONKEY", "R_NAME","S_NATIONKEY"]}

@@ -32,11 +32,12 @@ class AbstractTableOperatorManager:
     def build_filter_code(self, in_var_name, out_var_name, filter_field, filter_value, filter_op, used_filters):
         return {"WHERE": {"FIELD": filter_field, "OPERATOR": filter_op, "VALUE": filter_value}}, filter_field
 
-    def build_group_by_code_1(self, in_var_name, out_var_name, group_by_field, used_groups):
+    def build_group_by_code_1(self, in_var_name, out_var_name, group_by_field, used_groups, has_reduce):
         if group_by_field in self.contradict_group.keys():
             if any([el in self.contradict_group[group_by_field] for el in used_groups]):
                 return None, None
-
+        if not has_reduce:
+            return None, None
         return {"GROUP BY": group_by_field}, group_by_field
         #return f"GROUP BY {group_by_field}"
 
@@ -77,10 +78,10 @@ class AbstractTableOperatorManager:
     def data_source_code(self, out_var_name):
         return self.build_data_source_code(self.type_schema, self.table_name, self.out_var_name)
 
-    def group_by_code_1(self, in_var_name, out_var_name, seed, used_groups):
+    def group_by_code_1(self, in_var_name, out_var_name, seed, used_groups, has_reduce):
         g_field = str(get_element_by_seed(list(self.group_fields.keys()), seed))
         g_field_id = self.fields[g_field]
-        code, field = self.build_group_by_code_1(in_var_name, out_var_name, g_field, used_groups)
+        code, field = self.build_group_by_code_1(in_var_name, out_var_name, g_field, used_groups, has_reduce)
         selectivity = float(self.group_fields[g_field])
         return code, field, selectivity
 
@@ -125,7 +126,7 @@ class AbstractTableOperatorManager:
     def equals(self, obj):
         if type(obj) == AbstractTableOperatorManager:
             return obj.table_name == self.table_name
-        return false
+        return False
     
     def to_string(self):
         return self.table_name

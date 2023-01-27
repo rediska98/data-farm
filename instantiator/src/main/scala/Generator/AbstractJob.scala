@@ -11,29 +11,50 @@ import java.nio.file.Paths
   * Created by researchuser7 on 2020-03-17.
   */
 
-case class AbstractJob(jobBody:String, jobName:String, saveExecutionPlan:Boolean=false){
+case class AbstractJob(jobBody:String, jobName:String, saveExecutionPlan:Boolean=false, jobType: String){
 
-  var filledBody:String = fillBody()
-  var filledSBT:String = fillSBT()
+  var filledBody:String = fillBody(jobType)
+  var filledSBT:String = fillSBT(jobType)
 
-  def fillBody(): String ={
-//    if (saveExecutionPlan && planOutPath.isEmpty){
-//      println("WARNING - Request to save execution plan but no plan out path has been provided. Execution plan will not be saved!")
-//    }
-    AbstractJob.JOB_TEMPLATE
-      .replace("//#job_name#//", this.jobName)
-      .replace("//#body#//", this.jobBody)
-      .replace("//#save_plan#//", if (saveExecutionPlan) AbstractJob.saveExecPlanCode() else "")
+  def fillBody(jobType: String): String = jobType match {
+    case "SPARK" => {
+      AbstractJob.SPARK_JOB_TEMPLATE
+        .replace("//#job_name#//", this.jobName)
+        .replace("//#body#//", this.jobBody)
+        .replace("//#save_plan#//", if (saveExecutionPlan) AbstractJob.saveRunTimeSparkCode() else "")
+    }
+    case "FLINK" => {
+      //    if (saveExecutionPlan && planOutPath.isEmpty){
+      //      println("WARNING - Request to save execution plan but no plan out path has been provided. Execution plan will not be saved!")
+      //    }
+      AbstractJob.JOB_TEMPLATE
+        .replace("//#job_name#//", this.jobName)
+        .replace("//#body#//", this.jobBody)
+        .replace("//#save_plan#//", if (saveExecutionPlan) AbstractJob.saveExecPlanCode() else "")
+    }
+
+    case _ => throw new Exception(s"Unknown Job Type: $jobType")
   }
 
-  def fillSBT(): String = {
-    AbstractJob.SBT_TEMPLATE
-      .replace("//#job_name#//", this.jobName)
+
+
+  def fillSBT(jobType: String): String = jobType match {
+    case "SPARK" => {
+      AbstractJob.SPARK_SBT_TEMPLATE
+        .replace("//#job_name#//", this.jobName)
+    }
+    case "FLINK" => {
+      AbstractJob.SBT_TEMPLATE
+        .replace("//#job_name#//", this.jobName)
+    }
+
+    case _ => throw new Exception(s"Unknown Job Type: $jobType")
   }
 
   def createSBTProject(projectPath:String): Unit ={
 
     val tb = currentMirror.mkToolBox()
+    println(filledBody)
     val parsedTree = tb.parse(filledBody)
 
     val finalProjectPath = Paths.get(projectPath, jobName).toString
@@ -90,6 +111,82 @@ object AbstractJob {
        |
        |assemblyJarName in assembly := "//#job_name#//.jar"
      """.stripMargin
+
+  val SPARK_SBT_TEMPLATE: String =
+    """
+      |name := "//#job_name#//"
+      |
+      |version := "1.0"
+      |
+      |scalaVersion := "2.12.15"
+      |
+      |libraryDependencies ++= Seq(
+      |  "org.apache.spark" %% "spark-sql" % "3.3.0" % "provided",
+      |  "joda-time" % "joda-time" % "2.10.2"
+      |)
+      |
+      |assemblyJarName in assembly := "//#job_name#//.jar"
+     """.stripMargin
+
+
+  val SPARK_JOB_TEMPLATE: String =
+    """
+      |object //#job_name#// {
+      |
+      |  import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
+      |  import java.sql.Date
+      |  import scala.collection.JavaConverters._
+      |
+      |  import org.apache.spark.SparkConf
+      |  import org.apache.spark.SparkContext
+      |  import org.apache.spark.HashPartitioner
+      |
+      |  val dateFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      |
+      |  def main(args: Array[String]): Unit = {
+      |    val params = if (args.length==2){
+      |      Map(
+      |        "dataPath" -> args(0),
+      |        "execPlanOutPath" -> args(1)
+      |      )
+      |    }
+      |    else {
+      |      throw new Exception("Expected arguments: <data_path> <exec_plan_out_path>")
+      |    }
+      |    val conf = new SparkConf().setAppName("Datafarm Spark Job")
+      |
+      |    val sc = new SparkContext(conf)
+      |    sc.setLogLevel("ERROR")
+      |
+      |    val startTime = System.nanoTime()
+      |    //#body#//
+      |    val endTime = System.nanoTime()
+      |    val execTime = (endTime - startTime) / 1000000.0f
+      |
+      |    //#save_plan#//
+      |
+      |
+      |    sc.stop()
+      |  }
+      |
+      |  def saveRunTimeSpark(execTime: String, cardinality: String, params: Map[String, String]): Unit = {
+      |    import java.io.{File, PrintWriter};
+      |    import java.nio.file.Paths;
+      |    val outFilePath = Paths.get(params("execPlanOutPath"), StringContext("", ".json").s(this.getClass.getName))
+      |    val pw = new PrintWriter(new File(outFilePath.toString));
+      |
+      |    val reachExecPlan = "{\n" +
+      |      "\t\"netRunTime\": " + s"${execTime},\n" +
+      |      "\t\"cardinality\": " + s"${cardinality}\n" +
+      |      "}"
+      |
+      |    pw.write(reachExecPlan)
+      |    pw.close()
+      |  }
+      |
+      |}
+     """.stripMargin
+
 
   val JOB_TEMPLATE: String =
     """
@@ -176,6 +273,7 @@ object AbstractJob {
 
   def saveExecPlanCode() = s"""saveExecutionPlan(execPlan, execTime, params, env)"""
 
+  def saveRunTimeSparkCode() = s"""saveRunTimeSpark(execTime.toString, cardinality.toString, params)"""
 
 
 

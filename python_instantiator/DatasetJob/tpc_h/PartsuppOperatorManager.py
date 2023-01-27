@@ -3,7 +3,7 @@ import  python_instantiator.DatasetJob.utils as utils
 
 class PartsuppOperatorManager(AbstractTableOperatorManager):
     table_name = "partsupp"
-    full_table_name = "tcph.dbo.PARTSUPP"
+    full_table_name = "PARTSUPP"
     type_schema = "(int, int, int, float, str)"
     suffix = "PS_"
     fields = {

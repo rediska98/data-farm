@@ -26,7 +26,6 @@ class AbstractOperator:
 
     def data_source_code(self):
         if self.job_info:
-            print(self.op_pact)
             self.job_info.record(
                 self.n_id,
                 self.get_variable_name(),
@@ -39,38 +38,31 @@ class AbstractOperator:
 
     def map_code(self, in_var_name, has_group, has_order, map_seed, complexity = 0):
         if self.job_info:
-            print(self.op_pact)
             self.job_info.record(
                 self.n_id,
                 self.get_variable_name(),
                 self.op_pact,
-                [self.table_operator_manager.table_name],
-                selectivity=1.0,
-                complexity=complexity
+                [self.table_operator_manager.table_name]
             )
         return self.table_operator_manager.map_code(in_var_name, self.get_variable_name(), has_group, has_order, map_seed, complexity)
 
     def join_code(self, lx_var_name, rx_var_name, join_relation):
         if self.job_info:
-            print(self.op_pact)
             self.job_info.record(
                 self.n_id,
                 self.get_variable_name(),
                 self.op_pact,
                 [join_relation.lx.table_name, join_relation.rx.table_name]
-
             )
         return self.table_operator_manager.join_code(lx_var_name, rx_var_name, self.get_variable_name(), join_relation)
 
-    def group_by_code(self, in_var_name, next_op=None, seed=0, used_groups = []):
+    def group_by_code(self, in_var_name, next_op=None, seed=0, used_groups = [], has_reduce = False):
         if next_op:
             c, field, selectivity = self.table_operator_manager.group_by_code_2(in_var_name, self.get_variable_name(), next_op.get_variable_name(), seed, used_groups)
         else:
-            c, field, selectivity = self.table_operator_manager.group_by_code_1(in_var_name, self.get_variable_name(), seed, used_groups)
+            c, field, selectivity = self.table_operator_manager.group_by_code_1(in_var_name, self.get_variable_name(), seed, used_groups, has_reduce)
 
-        #print("rabotaet v group by code" + int(selectivity))
-        if self.job_info:
-            print(self.op_pact)
+        if self.job_info and c:
             self.job_info.record(
                 self.n_id,
                 self.get_variable_name(),
@@ -87,7 +79,6 @@ class AbstractOperator:
             c = self.table_operator_manager.reduce_code_1(in_var_name, self.get_variable_name())
 
         if self.job_info:
-            print(self.op_pact)
             self.job_info.record(
                 self.n_id,
                 self.get_variable_name(),
@@ -99,7 +90,6 @@ class AbstractOperator:
 
     def sink_code(self, in_var_name):
         if self.job_info:
-            print(self.op_pact)
             self.job_info.record(
                 self.n_id,
                 self.get_variable_name(),
@@ -114,7 +104,6 @@ class AbstractOperator:
         filter_code, field, selectivity = self.table_operator_manager.filter_code(in_var_name, self.get_variable_name(), seed, seed, used_filters)
         if selectivity: selectivity = float(selectivity)
         if self.job_info:
-            print(self.op_pact)
             self.job_info.record(
                 self.n_id,
                 self.get_variable_name(),
@@ -127,7 +116,6 @@ class AbstractOperator:
 
     def sort_partition_code(self, in_var_name, has_group, seed_1=0, seed_2=0):
         if self.job_info:
-            print(self.op_pact)
             self.job_info.record(
                 self.n_id,
                 self.get_variable_name(),
@@ -137,12 +125,12 @@ class AbstractOperator:
         return self.table_operator_manager.sort_partition_code(in_var_name, self.get_variable_name(), has_group, seed_1, seed_2)
 
     def partition_code(self, in_var_name):
-        if self.job_info:
-            print(self.op_pact)
-            self.job_info.record(
-                self.n_id,
-                self.get_variable_name(),
-                self.op_pact,
-                [self.table_operator_manager.table_name]
-            )
+        # since partition_code always returns empty string - commented out
+        # if self.job_info:
+        #     self.job_info.record(
+        #         self.n_id,
+        #         self.get_variable_name(),
+        #         self.op_pact,
+        #         [self.table_operator_manager.table_name]
+        #     )
         return self.table_operator_manager.partition_code(in_var_name, self.get_variable_name())

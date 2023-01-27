@@ -1,0 +1,29 @@
+Sort [cntrycode#377 ASC NULLS FIRST], true
++- Aggregate [cntrycode#377], [cntrycode#377, count(1) AS count(c_acctbal)#433L, sum(c_acctbal#28) AS sum(c_acctbal)#434]
+   +- Project [c_acctbal#28, cntrycode#377]
+      +- Join Inner, (c_acctbal#28 > avg_acctbal#388)
+         :- Project [c_acctbal#28, cntrycode#377]
+         :  +- Filter isnull(o_custkey#213L)
+         :     +- Join RightOuter, (o_custkey#213L = c_custkey#23L)
+         :        :- Aggregate [o_custkey#213L], [o_custkey#213L]
+         :        :  +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_custkey AS o_custkey#213L]
+         :        :     +- MapElements main.scala.TpchSchemaProvider$$Lambda$1806/0x0000000840db9040@3d0697da, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#211: main.scala.Order
+         :        :        +- MapElements main.scala.TpchSchemaProvider$$Lambda$1805/0x0000000840db8040@538d2308, class java.lang.String, [StructField(value,StringType,true)], obj#197: [Ljava.lang.String;
+         :        :           +- DeserializeToObject value#188.toString, obj#196: java.lang.String
+         :        :              +- Relation [value#188] text
+         :        +- Project [c_acctbal#28, c_custkey#23L, UDF(c_phone#27) AS cntrycode#377]
+         :           +- Filter UDF(UDF(c_phone#27))
+         :              +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_custkey AS c_custkey#23L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_name, true, false, true) AS c_name#24, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_address, true, false, true) AS c_address#25, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_nationkey AS c_nationkey#26L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_phone, true, false, true) AS c_phone#27, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_acctbal AS c_acctbal#28, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_mktsegment, true, false, true) AS c_mktsegment#29, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_comment, true, false, true) AS c_comment#30]
+         :                 +- MapElements main.scala.TpchSchemaProvider$$Lambda$1782/0x0000000840d98040@723081a2, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#22: main.scala.Customer
+         :                    +- MapElements main.scala.TpchSchemaProvider$$Lambda$1757/0x0000000840d8a040@4b99f2ed, class java.lang.String, [StructField(value,StringType,true)], obj#9: [Ljava.lang.String;
+         :                       +- DeserializeToObject value#0.toString, obj#8: java.lang.String
+         :                          +- Relation [value#0] text
+         +- Filter isnotnull(avg_acctbal#388)
+            +- Aggregate [avg(c_acctbal#28) AS avg_acctbal#388]
+               +- Project [c_acctbal#28]
+                  +- Filter (UDF(UDF(c_phone#27)) AND (c_acctbal#28 > 0.0))
+                     +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_custkey AS c_custkey#23L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_name, true, false, true) AS c_name#24, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_address, true, false, true) AS c_address#25, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_nationkey AS c_nationkey#26L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_phone, true, false, true) AS c_phone#27, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_acctbal AS c_acctbal#28, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_mktsegment, true, false, true) AS c_mktsegment#29, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_comment, true, false, true) AS c_comment#30]
+                        +- MapElements main.scala.TpchSchemaProvider$$Lambda$1782/0x0000000840d98040@723081a2, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#22: main.scala.Customer
+                           +- MapElements main.scala.TpchSchemaProvider$$Lambda$1757/0x0000000840d8a040@4b99f2ed, class java.lang.String, [StructField(value,StringType,true)], obj#9: [Ljava.lang.String;
+                              +- DeserializeToObject value#413.toString, obj#8: java.lang.String
+                                 +- Relation [value#413] text

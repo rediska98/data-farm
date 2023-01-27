@@ -3,7 +3,7 @@ import  python_instantiator.DatasetJob.utils as utils
 
 class NationOperatorManager(AbstractTableOperatorManager):
     table_name = "nation"
-    full_table_name = "tcph.dbo.NATION"
+    full_table_name = "NATION"
     type_schema = "(int, str, int, str)"
     suffix = "N_"
     fields = {
@@ -21,8 +21,8 @@ class NationOperatorManager(AbstractTableOperatorManager):
     # filter_field_value for the selectivities, don't know if that is relevant for my case yet
     filter_field_value = {
         "N_REGIONKEY": {
-            "selectivity": ["0.25", "0.5", "0.75"],
-            "values": ["1.0", "2.0", "3.0"]
+            'selectivity': ['0.2', '0.2', '0.2', '0.2', '0.2'],
+            'values': ['0', '1', '2', '3', '4']
         }
     }
     
@@ -52,7 +52,7 @@ class NationOperatorManager(AbstractTableOperatorManager):
         if field == "N_REGIONKEY":
             # This is not correct, but I will first leave it as it is, so that I can see what is wrong
             #filter_field = self.fields[field]
-            filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
+            filter_value = str(utils.get_element_by_seed(self.filter_field_value[field]["values"], value_seed))
             filter_op = "="
 
         selectivity = utils.get_element_by_seed(self.filter_field_value[field]["selectivity"], value_seed)

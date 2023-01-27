@@ -3,7 +3,7 @@ import  python_instantiator.DatasetJob.utils as utils
 
 class OrdersOperatorManager(AbstractTableOperatorManager):
     table_name = "orders"
-    full_table_name = "tcph.dbo.ORDERS"
+    full_table_name = "ORDERS"
     type_schema = "(int, int, str, float, date, str, str, int, str)"
     suffix = "O_"
     fields = {
@@ -30,15 +30,15 @@ class OrdersOperatorManager(AbstractTableOperatorManager):
             "values": ["'F'", "'O'", "'P'"]
         },
         "O_TOTALPRICE": {
-            "selectivity": ["0.25", "0.5", "0.75","0.25", "0.5", "0.75"],# changed, to be regarded again if necessary
-            "values": ["5662.01","34886.128966", "77894.7475", "144409.03999999998", "215500.225", "375992.3129"]
+            'selectivity': ['0.25', '0.5', '0.75'],
+            'values': ['77894.7475', '144409.03999999998', '215500.225']
         },
         "O_ORDERDATE": {
-            "selectivity": ["0.25","0.25", "0.25", "0.5", "0.75", "0.25"], # changed, to be regarded again if necessary
-            "values": ["'1992-03-01'","'1993-08-27'", "'1994-05-01'", "'1995-04-20'", "'1996-12-10'", "'1998-02-25'"]
+            'selectivity': ['0.25', '0.5', '0.75'],
+            'values': ["'1993-08-27'", "'1995-04-20'", "'1996-12-10'"]
         },
         "O_ORDERPRIORITY": {
-            "selectivity": ["0.2","0.2", "0.2", "0.2", "0.2"],
+            "selectivity": ["0.2", "0.2", "0.2", "0.2", "0.2"],
             "values": ["'1-URGENT'", "'2-HIGH'", "'3-MEDIUM'", "'4-NOT SPECIFIED'", "'5-LOW'"]
         }
     }
@@ -79,9 +79,13 @@ class OrdersOperatorManager(AbstractTableOperatorManager):
         selectivity = utils.get_element_by_seed(self.filter_field_value[field]["selectivity"], value_seed)
 
         if field == "O_ORDERDATE":
-            return self.handle_orderdate(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
+            element = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
+            return {"WHERE": {"FIELD": "O_ORDERDATE", "OPERATOR": "<=", "VALUE": element}}, field, selectivity
+            #return self.handle_orderdate(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
         elif field == "O_TOTALPRICE":
-            return self.handle_price(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
+            element = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
+            return {"WHERE": {"FIELD": "O_TOTALPRICE", "OPERATOR": "<=", "VALUE": element}}, field, selectivity
+            #return self.handle_price(field_seed+value_seed, field_seed+1, value_seed+1), field, selectivity
         elif field == "O_ORDERSTATUS":
             #filter_field = self.fields[field]
             element = str(utils.get_element_by_seed(self.filter_field_value[field]["values"],value_seed))
@@ -117,10 +121,10 @@ class OrdersOperatorManager(AbstractTableOperatorManager):
             value = str(utils.get_element_by_seed(self.filter_field_value["O_ORDERDATE"]["values"], value_seed_2))
             if (value_seed_1 % 2) == 0:
                 if (value_seed_2 % 2) == 0:
-                    return {"WHERE": {"FIELD": "O_ORDERDATE", "OPERATOR": filter_op, "VALUE": f"dateadd(yy, 1, cast({value} as date))"}}
+                    return {"WHERE": {"FIELD": "O_ORDERDATE", "OPERATOR": filter_op, "VALUE": value}}
                 else:
                     value = str(utils.get_element_by_seed(self.filter_field_value["O_ORDERDATE"]["values"], value_seed_2))
-                    return {"WHERE": {"FIELD": "O_ORDERDATE", "OPERATOR": filter_op, "VALUE": f"dateadd(mm, 1, cast({value} as date))"}}
+                    return {"WHERE": {"FIELD": "O_ORDERDATE", "OPERATOR": filter_op, "VALUE": value}}
             else:
                 return {"WHERE": {"FIELD": "O_ORDERDATE", "OPERATOR": filter_op, "VALUE": value}}
         else:

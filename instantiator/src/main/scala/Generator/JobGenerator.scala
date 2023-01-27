@@ -217,13 +217,13 @@ case class JobGenerator(abstractPlan: AbstractExecutionPlan, datasetOperatorMana
     operatorCodes.filter(_.nonEmpty)
   }
 
-  def generate(entryOpId: String = "Data Source_0", jobName: String, saveExecutionPlan: Boolean = false): AbstractJob = {
+  def generate(entryOpId: String = "Data Source_0", jobName: String, saveExecutionPlan: Boolean = false, jobType: String): AbstractJob = {
     //println(abstractPlan.vertexSet().map(_.opId).mkString(", "))
 
     val operatorCodes = _generate(abstractPlan: AbstractExecutionPlan, entryOpId: String)
     //println(operatorCodes)
 
-    AbstractJob(operatorCodes.mkString("\n"), jobName, saveExecutionPlan = saveExecutionPlan)
+    AbstractJob(operatorCodes.mkString("\n"), jobName, saveExecutionPlan = saveExecutionPlan, jobType)
   }
 }
 
@@ -237,7 +237,8 @@ object JobGenerator {
         "dataManager" -> args(2),
         "abstractPlansSource" -> args(3),
         "genJobsDest" -> args(4),
-        "jobSeed" -> args.lift(5).getOrElse("-1")
+        "jobSeed" -> args.lift(5).getOrElse("-1"),
+        "jobType" -> args(6)
 
       )
     else
@@ -267,7 +268,7 @@ object JobGenerator {
       val i = Paths.get(absPlanPath).getFileName.toString.replace(".json", "").split("_").last.toInt
 
       val abstractPlan = AbstractExecutionPlan.parseExecPlan(Paths.get(absPlanPath).toString)
-      val tpchDatasetOperatorManager = AbstractDatasetOperatorManager(params("dataManager"))
+      val tpchDatasetOperatorManager = AbstractDatasetOperatorManager(params("dataManager"), params("jobType"))
 
       for (j <- 0 until params("nVersions").toInt) {
 
@@ -285,7 +286,8 @@ object JobGenerator {
         val generatedJob = jGenerator.generate(
           abstractPlan.getVertexFromId("Data Source_0").opId,
           jobId,
-          saveExecutionPlan = true
+          saveExecutionPlan = true,
+          params("jobType")
         )
 
         println(JobInfoRecorder.currentJobInfo.get)

@@ -1,0 +1,241 @@
+{
+  "executionPlan": {
+    "nodes": [
+      {
+        "operator": "Data Sink",
+        "id": 0,
+        "predecessors": [
+          {
+            "id": 1
+          }
+        ],
+        "type": "sink"
+      },
+      {
+        "operator": "Sort",
+        "id": 1,
+        "predecessors": [
+          {
+            "id": 2
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Aggregate",
+        "id": 2,
+        "predecessors": [
+          {
+            "id": 3
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "GroupBy",
+        "id": 3,
+        "predecessors": [
+          {
+            "id": 4
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Sort",
+        "id": 4,
+        "predecessors": [
+          {
+            "id": 5
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Nested Loop",
+        "id": 5,
+        "predecessors": [
+          {
+            "id": 6
+          },
+          {
+            "id": 7
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Gather",
+        "id": 6,
+        "predecessors": [
+          {
+            "id": 8
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Hash Join",
+        "id": 7,
+        "predecessors": [
+          {
+            "id": 9
+          },
+          {
+            "id": 10
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Hash Join",
+        "id": 8,
+        "predecessors": [
+          {
+            "id": 11
+          },
+          {
+            "id": 12
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Seq Scan",
+        "id": 9,
+        "type": "Data Source"
+      },
+      {
+        "operator": "Hash",
+        "id": 10,
+        "predecessors": [
+          {
+            "id": 13
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Hash Join",
+        "id": 11,
+        "predecessors": [
+          {
+            "id": 15
+          },
+          {
+            "id": 17
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Hash",
+        "id": 12,
+        "predecessors": [
+          {
+            "id": 18
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Filter",
+        "id": 13,
+        "predecessors": [
+          {
+            "id": 14
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Seq Scan",
+        "id": 14,
+        "type": "Data Source"
+      },
+      {
+        "operator": "Filter",
+        "id": 15,
+        "predecessors": [
+          {
+            "id": 16
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Seq Scan",
+        "id": 16,
+        "type": "Data Source"
+      },
+      {
+        "operator": "Hash",
+        "id": 17,
+        "predecessors": [
+          {
+            "id": 19
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Seq Scan",
+        "id": 18,
+        "type": "Data Source"
+      },
+      {
+        "operator": "Hash Join",
+        "id": 19,
+        "predecessors": [
+          {
+            "id": 20
+          },
+          {
+            "id": 22
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Filter",
+        "id": 20,
+        "predecessors": [
+          {
+            "id": 21
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Seq Scan",
+        "id": 21,
+        "type": "Data Source"
+      },
+      {
+        "operator": "Hash",
+        "id": 22,
+        "predecessors": [
+          {
+            "id": 23
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Filter",
+        "id": 23,
+        "predecessors": [
+          {
+            "id": 24
+          }
+        ],
+        "type": "operator"
+      },
+      {
+        "operator": "Seq Scan",
+        "id": 24,
+        "type": "Data Source"
+      }
+    ]
+  }
+}

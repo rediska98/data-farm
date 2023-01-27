@@ -37,6 +37,25 @@ case class LineitemOperatorManager() extends AbstractTableOperatorManager {
     "COMMENT" -> "16"
   )
 
+  val sortFields: Map[String, String] = Map(
+    "ORDERKEY" -> "1",
+    "PARTKEY" -> "2",
+    "SUPPKEY" -> "3",
+    "LINENUMBER" -> "4",
+    "QUANTITY" -> "5",
+    "EXTENDEDPRICE" -> "6",
+    "DISCOUNT" -> "7",
+    "TAX" -> "8",
+    "RETURNFLAG" -> "9",
+    "LINESTATUS" -> "10",
+    "SHIPDATE" -> "11",
+    "COMMITDATE" -> "12",
+    "RECEIPTDATE" -> "13",
+    "SHIPINSTRUCT" -> "14",
+    "SHIPMODE" -> "15",
+    "COMMENT" -> "16"
+  )
+
   val joinFieldTable: Map[String, Map[String, String]] = Map(
     "ORDERKEY" -> Map(
       "orders" -> "ORDERKEY"

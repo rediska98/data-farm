@@ -1,0 +1,33 @@
+GlobalLimit 100
++- LocalLimit 100
+   +- Sort [o_totalprice#215 DESC NULLS LAST, o_orderdate#216 ASC NULLS FIRST], true
+      +- Aggregate [c_name#24, c_custkey#23L, o_orderkey#212L, o_orderdate#216, o_totalprice#215], [c_name#24, c_custkey#23L, o_orderkey#212L, o_orderdate#216, o_totalprice#215, sum(l_quantity#83) AS sum(l_quantity)#3248]
+         +- Project [l_quantity#83, c_name#24, c_custkey#23L, o_orderkey#212L, o_orderdate#216, o_totalprice#215]
+            +- Join Inner, (c_custkey#23L = o_custkey#213L)
+               :- Project [o_orderkey#212L, o_custkey#213L, o_totalprice#215, o_orderdate#216, l_quantity#83]
+               :  +- Join Inner, (o_orderkey#212L = l_orderkey#79L)
+               :     :- Project [o_orderkey#212L, o_custkey#213L, o_totalprice#215, o_orderdate#216]
+               :     :  +- Join Inner, (o_orderkey#212L = key#3084L)
+               :     :     :- Project [l_orderkey#79L AS key#3084L]
+               :     :     :  +- Filter (isnotnull(sum_quantity#3081) AND (sum_quantity#3081 > 300.0))
+               :     :     :     +- Aggregate [l_orderkey#79L], [l_orderkey#79L, sum(l_quantity#83) AS sum_quantity#3081]
+               :     :     :        +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Lineitem, true])).l_orderkey AS l_orderkey#79L, knownnotnull(assertnotnull(input[0, main.scala.Lineitem, true])).l_quantity AS l_quantity#83]
+               :     :     :           +- MapElements main.scala.TpchSchemaProvider$$Lambda$1700/0x0000000840d17840@2835b3d1, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#78: main.scala.Lineitem
+               :     :     :              +- MapElements main.scala.TpchSchemaProvider$$Lambda$1699/0x0000000840d15040@690c3b1f, class java.lang.String, [StructField(value,StringType,true)], obj#57: [Ljava.lang.String;
+               :     :     :                 +- DeserializeToObject value#48.toString, obj#56: java.lang.String
+               :     :     :                    +- Relation [value#48] text
+               :     :     +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_orderkey AS o_orderkey#212L, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_custkey AS o_custkey#213L, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_totalprice AS o_totalprice#215, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Order, true])).o_orderdate, true, false, true) AS o_orderdate#216]
+               :     :        +- MapElements main.scala.TpchSchemaProvider$$Lambda$1706/0x0000000840d22840@753c7411, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#211: main.scala.Order
+               :     :           +- MapElements main.scala.TpchSchemaProvider$$Lambda$1705/0x0000000840d21840@6ebf9c2d, class java.lang.String, [StructField(value,StringType,true)], obj#197: [Ljava.lang.String;
+               :     :              +- DeserializeToObject value#188.toString, obj#196: java.lang.String
+               :     :                 +- Relation [value#188] text
+               :     +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Lineitem, true])).l_orderkey AS l_orderkey#79L, knownnotnull(assertnotnull(input[0, main.scala.Lineitem, true])).l_quantity AS l_quantity#83]
+               :        +- MapElements main.scala.TpchSchemaProvider$$Lambda$1700/0x0000000840d17840@2835b3d1, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#78: main.scala.Lineitem
+               :           +- MapElements main.scala.TpchSchemaProvider$$Lambda$1699/0x0000000840d15040@690c3b1f, class java.lang.String, [StructField(value,StringType,true)], obj#57: [Ljava.lang.String;
+               :              +- DeserializeToObject value#3109.toString, obj#56: java.lang.String
+               :                 +- Relation [value#3109] text
+               +- SerializeFromObject [knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_custkey AS c_custkey#23L, staticinvoke(class org.apache.spark.unsafe.types.UTF8String, StringType, fromString, knownnotnull(assertnotnull(input[0, main.scala.Customer, true])).c_name, true, false, true) AS c_name#24]
+                  +- MapElements main.scala.TpchSchemaProvider$$Lambda$1682/0x0000000840d09840@499445d2, class [Ljava.lang.String;, [StructField(value,ArrayType(StringType,true),true)], obj#22: main.scala.Customer
+                     +- MapElements main.scala.TpchSchemaProvider$$Lambda$1657/0x0000000840cf6040@3ba015b1, class java.lang.String, [StructField(value,StringType,true)], obj#9: [Ljava.lang.String;
+                        +- DeserializeToObject value#0.toString, obj#8: java.lang.String
+                           +- Relation [value#0] text

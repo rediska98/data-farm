@@ -3,6 +3,7 @@ package Generator.DatasetJob
 import Generator.DatasetHelper
 import Generator.DatasetJob.imdb_kaggle.table.IMDBKDatasetOperatorManager
 import Generator.DatasetJob.tpc_h.table.TPCHDatasetOperatorManager
+import Generator.DatasetJob.tpc_h.spark_table.TPCHDatasetOperatorManager
 import Generator.DatasetJob.utils.getElementBySeed
 
 import scala.collection.mutable
@@ -110,12 +111,17 @@ trait AbstractDatasetOperatorManager {
 }
 
 object AbstractDatasetOperatorManager {
-  def apply(s: String): AbstractDatasetOperatorManager = {
-    if (s == "TPCH")
-      TPCHDatasetOperatorManager
-    else if (s == "IMDB")
-      IMDBKDatasetOperatorManager
+  def apply(s: String, j: String): AbstractDatasetOperatorManager = {
+    if (j == "FLINK")
+      if (s == "TPCH")
+        Generator.DatasetJob.tpc_h.table.TPCHDatasetOperatorManager
+      else if (s == "IMDB")
+        IMDBKDatasetOperatorManager
+      else
+        throw new Exception(s"Can not find Dataset Operator Manger '$s'.")
+    else if (j == "SPARK")
+      Generator.DatasetJob.tpc_h.spark_table.TPCHDatasetOperatorManager
     else
-      throw new Exception(s"Can not find Dataset Operator Manger '$s'.")
+      throw new Exception(s"Can not find Job '$j'.")
   }
 }

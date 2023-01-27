@@ -9,10 +9,9 @@ from python_instantiator.DatasetJob.tpc_h.CustomerOperatorManager import Custome
 from python_instantiator.DatasetJob.tpc_h.LineitemOperatorManager import LineitemOperatorManager
 
 class TPCHDatasetOperatorManager(AbstractDatasetOperatorManager):
-    tables = ["lineitem", "orders", "customer", "partsupp", "part", "supplier", "nation", "region"]
+    tables = ["lineitem", "orders", "customer", "partsupp", "part", "supplier", "nation"]
     tables_to_class = {
         "lineitem": LineitemOperatorManager,
-        "region": RegionOperatorManager,
         "nation": NationOperatorManager,
         "part": PartOperatorManager,
         "supplier": SupplierOperatorManager,

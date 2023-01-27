@@ -5,6 +5,7 @@ import numpy as np
 from scipy.stats import kurtosis, skew
 import matplotlib.pyplot as plt
 import seaborn as sns
+from CONFIG import CONFIG
 
 
 import networkx as nx
@@ -37,7 +38,7 @@ def get_tables_features(df_tables, data_cardinality=False, factors=-1, verbose=T
     if data_cardinality:
         cards = []
         ks = []
-        for k, values in df_tables_enc.iteritems():
+        for k, values in df_tables_enc.items(): #this place initially was df_tables_enc.iteritems()
             new_values = [v * data_cardinality[k[1]][one_hot_dec[idx]] for idx, v in enumerate(values)]
             cards.append(new_values)
             ks.append(k)
@@ -258,14 +259,16 @@ def compute_jobs_cardinality_features(jobs_card_df, percentiles=[0.1, 0.5, 0.9])
 
     jobs_card_features_df.columns = ["outCardinality_" + c for c in jobs_card_features_df.columns]
 
-    # Complexity features
-    complexity_features_df = jobs_card_df[jobs_card_df["pact"] == "Map"]["outCardinality"] * (10 ** jobs_card_df[jobs_card_df["pact"] == "Map"]["complexity"]) # TODO 10 is a fixed parameter to be sostituted with real number of features
-    complexity_features_df = complexity_features_df.groupby(level=[0, 1]).describe()[["mean", "std", "min", "max"]]
-    complexity_features_df = complexity_features_df.fillna(0.0)
-    complexity_features_df.columns = ["complexity_" + c for c in complexity_features_df.columns]
+    # Complexity features (skipping them for SQL Jobs)
+    if CONFIG.EXPERIMENT_JOB != "SQL":
+        complexity_features_df = jobs_card_df[jobs_card_df["pact"] == "Map"]["outCardinality"] * (10 ** jobs_card_df[jobs_card_df["pact"] == "Map"]["complexity"]) # TODO 10 is a fixed parameter to be sostituted with real number of features
+        complexity_features_df = complexity_features_df.groupby(level=[0, 1]).describe()[["mean", "std", "min", "max"]]
+        complexity_features_df = complexity_features_df.fillna(0.0)
+        complexity_features_df.columns = ["complexity_" + c for c in complexity_features_df.columns]
 
-    j_features = pd.merge(jobs_card_features_df, complexity_features_df, left_index=True, right_index=True)
-
+        j_features = pd.merge(jobs_card_features_df, complexity_features_df, left_index=True, right_index=True)
+    else:
+        j_features = jobs_card_features_df
 
     # Selectivity features
     selectivity_features_df = jobs_card_df.groupby(level=[0, 1])["selectivity"].describe()[["mean", "min", "max"]]

@@ -25,6 +25,17 @@ case class CustomerOperatorManager() extends AbstractTableOperatorManager {
     "COMMENT" -> "8"
   )
 
+  override val sortFields: Map[String, String] = Map(
+    "CUSTKEY" -> "1",
+    "NAME" -> "2",
+    "ADDRESS" -> "3",
+    "NATIONKEY" -> "4",
+    "PHONE" -> "5",
+    "ACCTBAL" -> "6",
+    "MKTSEGMENT" -> "7",
+    "COMMENT" -> "8"
+  )
+
   override val joinFieldTable: Map[String, Map[String, String]] = Map(
     "CUSTKEY" -> Map(
       "orders" -> "CUSTKEY"

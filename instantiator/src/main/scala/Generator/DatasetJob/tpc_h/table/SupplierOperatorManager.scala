@@ -24,6 +24,15 @@ case class SupplierOperatorManager() extends AbstractTableOperatorManager{
     "ACCTBAL" -> "6",
     "COMMENT" -> "7"
   )
+  override val sortFields: Map[String, String] = Map(
+    "SUPPKEY" -> "1",
+    "NAME" -> "2",
+    "ADDRESS" -> "3",
+    "NATIONKEY" -> "4",
+    "PHONE" -> "5",
+    "ACCTBAL" -> "6",
+    "COMMENT" -> "7"
+  )
 
   override val joinFieldTable: Map[String, Map[String, String]] = Map(
     "SUPPKEY"-> Map(

@@ -1,15 +1,45 @@
 class NodeOp:
-    OPERATORS = {
-        "Data Source": ["Data Source"],
+
+    SPARK_OPERATORS = {
+        "Data Source": ["textFile", "Relation"],
+        "Filter": ["filter"],
+        "Map": ["MapElements", "map", "Project", "flatMap", "mapPartitions",
+                "mapPartitionsWithIndex", "mapValues", "flatMapValues",
+                "sample", "distinct", "GlobalLimit", "LocalLimit"],
+        "Reduce": ["reduce", "Aggregate", "reduceByKey", "aggregateByKey"],
+        "Group by": ["keyBy", "groupByKey", "groupBy", "cogroup"],
+        "Join": ["join", "leftOuterJoin", "fullOuterJoin",
+                 "rightOuterJoin", "union", "intersection", "cartesian"],
+        "Bulk Iteration": ["foreach"],
+        "Partition": ["zip"],
+        "Sort-Partition": ["sortBy", "sortByKey", "Sort"],
+        "Data Sink": ["Data Sink", "saveAsTextFile"]
+    }
+
+    SQL_OPERATORS = {
+        "Data Source": ["Seq Scan"],
         "Filter": ["Filter"],
-        "Map": ["Map", "FlatMap", "CoMap", "CoFlatMap", "MapPartition"],
-        "Reduce": ["Reduce"],
-        "Group by": ["GroupReduce", "CoGroup", "GroupCombine"],
-        "Join": ["Join", "Outer Join"],
-        "Bulk Iteration": ["Bulk Iteration", "Workset Iteration"],
-        "Partition": ["Partition"],
-        "Sort-Partition": ["Sort-Partition"],
-        "Data Sink": ["Data Sink"]
+        "Map": ["Limit", "Hash"],
+        "Reduce": ["Aggregate"],
+        "Group by": ["GroupBy"],
+        "Join": ["Hash Join", "Nested Loop"],
+        "Bulk Iteration": [],
+        "Partition": ["Gather", "Gather Merge"],
+        "Sort-Partition": ["Sort"],
+        "Data Sink": []
+    }
+
+    OPERATORS = {
+        "Data Source": ["Data Source"] + SPARK_OPERATORS['Data Source'] + SQL_OPERATORS['Data Source'],
+        "Filter": ["Filter"] + SPARK_OPERATORS['Filter'] + SQL_OPERATORS['Filter'],
+        "Map": ["Map", "FlatMap", "CoMap", "CoFlatMap", "MapPartition", "MapElements"] + SPARK_OPERATORS['Map'] + SQL_OPERATORS['Map'],
+        "Reduce": ["Reduce"] + SPARK_OPERATORS['Reduce'] + SQL_OPERATORS['Reduce'],
+        "Group by": ["GroupReduce", "CoGroup", "GroupCombine"] + SPARK_OPERATORS['Group by'] + SQL_OPERATORS['Group by'],
+        "Join": ["Join", "Outer Join"] + SPARK_OPERATORS['Join'] + SQL_OPERATORS['Join'],
+        "Bulk Iteration": ["Bulk Iteration", "Workset Iteration"] + SPARK_OPERATORS['Bulk Iteration'] + SQL_OPERATORS['Bulk Iteration'],
+        "Partition": ["Partition"] + SPARK_OPERATORS['Partition'] + SQL_OPERATORS['Partition'],
+        "Sort-Partition": ["Sort-Partition"] + SPARK_OPERATORS['Sort-Partition'] + SQL_OPERATORS['Sort-Partition'],
+        "Data Sink": ["Data Sink"] + SPARK_OPERATORS['Data Sink'] + SQL_OPERATORS['Data Sink']
     }
 
     FIELDS = {

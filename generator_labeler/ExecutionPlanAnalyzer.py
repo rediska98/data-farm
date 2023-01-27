@@ -169,7 +169,7 @@ def compute_graph_from_plan(exec_plan, include_cycles=True):
         if "predecessors" in n.keys():
             pres = n["predecessors"]
             for p in pres:
-                color = "orange" if p["ship_strategy"] == "Broadcast" else "black"
+                color = "orange" if p["ship_strategy"] == "Broadcast" else "black" #ToDo
                 G.add_edge(p["id"], n["id"], **p, color=color)
 
     return G

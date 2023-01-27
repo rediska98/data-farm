@@ -1,0 +1,71 @@
+{
+  "executionPlan": {
+    "nodes": [
+      {
+        "id": 1,
+        "type": "Data Source",
+        "operator": "Relation"
+      },
+      {
+        "id": 2,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 1
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "type": "operator",
+        "operator": "MapElements",
+        "predecessors": [
+          {
+            "id": 2
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "type": "operator",
+        "operator": "Filter",
+        "predecessors": [
+          {
+            "id": 3
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "type": "operator",
+        "operator": "Project",
+        "predecessors": [
+          {
+            "id": 4
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "type": "operator",
+        "operator": "Aggregate",
+        "predecessors": [
+          {
+            "id": 5
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "type": "sink",
+        "operator": "Data Sink",
+        "predecessors": [
+          {
+            "id": 6
+          }
+        ]
+      }
+    ]
+  }
+}
